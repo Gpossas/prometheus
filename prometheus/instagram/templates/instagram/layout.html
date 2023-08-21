@@ -1,0 +1,18 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="{% static 'instagram/styles.css' %}" rel="stylesheet">
+  <title>Prometheus</title>
+</head>
+<body>
+  <header>
+    <h1>"Prometheus stole fire from the gods and gave it to man. For this, he was chained to a rock and tortured for eternity."</h1>
+  </header>
+
+  {% block body %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,5 @@
+/v_env
+/prometheus/instagram/prometheus/__pycache__
+/prometheus/instagram/__pycache__
+/prometheus/prometheus/__pycache__
+/prometheus/db.sqlite3
