@@ -32,9 +32,22 @@ function getVideo( api_url ){
   .then( data => {
     console.log(data)
     //TODO: create a more complex element, a preview of the page using name and profile_picture
+
+
     const video = document.createElement('p');
     video.textContent = data['name'];
+
+    var image = document.createElement('img');
+    image.setAttribute("src", data['profile_picture']);
+
+    var link = document.createElement('a');
+    link.setAttribute("href", data['video_url']);
+    
     videosDiv.appendChild( video );
+    videosDiv.appendChild( image );
+    link.appendChild( video );
+    video.appendChild( link );
+    
   })
   .catch( error =>{
     console.log( "couldn't find video" );
