@@ -1,5 +1,12 @@
 {% extends "instagram/layout.html" %}
 
 {% block body %}
-  <input type="text" placeholder="video url">
+  <div class="search">
+    <input id="url_input" name="input" type="text" placeholder="video url" autofocus>
+    <button id="search_button" data-url="{% url 'api:get_video' %}">Search url</button>
+  </div>
+
+  <div class="videos">
+
+  </div>
 {% endblock %}
