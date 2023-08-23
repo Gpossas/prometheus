@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-
+import os
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, NoSuchAttributeException, StaleElementReferenceException
 from pathlib import Path
@@ -42,16 +42,35 @@ def get_video( request ):
     'video_url': video
   })
 
-
+@api_view(['POST'])
 def download_videos( request ):
-  videos = request.body
-
+  videos = json.loads( request.body.decode('utf-8') )
   CHUNK_SIZE = 256
+  directory_path = get_directory_path()
+
   for video in videos:
-    name, video_url = video['name'], video['video_url']
+    name, video_url = video[0], video[1]
 
     response_object = requests.get( video_url, stream = True )
-    file_name = "_".join( ( name, "markZuckeberkKillerTube.mp4" ) ) 
-    with open( f"{ Path.home() }/Downloads/{ file_name }", "wb" ) as file: 
+    file_name = "_".join( ( name, "prometheus.mp4" ) ) 
+    with open( f"{ directory_path }/{ file_name }", "wb" ) as file: 
       for chunk in response_object.iter_content( chunk_size=CHUNK_SIZE ):
         file.write( chunk )
+
+  driver = WebDriverSingleton()
+  driver.quit()
+
+  return Response()
+
+def get_directory_path():
+  directory_path = f"{ Path.home() }/Downloads/Prometheus"
+  if os.path.exists( directory_path ):
+    start = directory_path.find( '(' )
+    end = directory_path.find( ')' )
+    if start == -1 and end == -1:
+      directory_path = ' '.join( ( directory_path, '(1)' ) )
+    else:
+      counter = int( directory_path[start + 1: end] )
+      directory_path = ' '.join( ( directory_path, f'({ counter + 1 })' ) )
+  os.mkdir( directory_path )
+  return directory_path
