@@ -2,8 +2,8 @@
 
 {% block body %}
   <div class="search">
-    <input id="url_input" name="input" type="text" placeholder="video url" autofocus>
-    <button id="search_button" data-url="{% url 'api:get_video' %}">Search url</button>
+    <input id="url_input" name="input" type="text" placeholder=" Link do video" autofocus>
+    <button id="search_button" data-url="{% url 'api:get_video' %}">Procurar<br>video</button>
   </div>
 
   <div class="videos">
@@ -11,6 +11,10 @@
   </div>
 
   <div class="download">
-    <button id="download_button" data-url="{% url 'api:download_videos' %}">Download videos</button>
+    <button id="download_button" data-url="{% url 'api:download_videos' %}">Baixar video</button>
+  </div>
+
+  <div class="filler">
+
   </div>
 {% endblock %}
