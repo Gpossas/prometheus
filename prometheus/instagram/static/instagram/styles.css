@@ -2,13 +2,41 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  
 }
 
 header{
-  background-color: black;
-  color: white;
+
+}
+.header-shell{
+  
+  background-color: rgb(58, 58, 58);
+  color: rgb(214, 214, 214);
+  padding-top: 100px;
+  padding-bottom: 50px;
+}
+.header-quote{
+  margin-left: 10%;
+  width: 40%;
+  font-size:30px;
+  justify-content: left;
+}
+.header-catchphrase{
+  margin-left: 15%;
+  padding-top: 50px;
+  font-size: 20px;
+  text-align:left;
+  
 }
 
 h1{
   text-align: center;
+}
+
+.search {
+  margin: 0 auto;
+  display: flex;
+  padding: 20px;
+  justify-content: center;
+
 }
