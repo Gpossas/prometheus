@@ -1,14 +1,12 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import NoSuchElementException, NoSuchAttributeException, StaleElementReferenceException
 from pathlib import Path
 import requests
 import json
+from .web_driver_singleton import WebDriverSingleton
 
 
 @api_view(['POST'])
@@ -24,9 +22,8 @@ def get_video( request ):
   }
   """
 
-  #TODO: put this driver outside fuction
-  driver = webdriver.Chrome( service=Service( ChromeDriverManager().install() ) ) 
-  url = json.loads( request.body.decode('utf-8') ).get('url')
+  driver = WebDriverSingleton()
+  url = json.loads( request.body.decode('utf-8') ).get( 'url' )
   driver.get( url )
   driver.implicitly_wait( 8 )
   try:

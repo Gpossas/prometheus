@@ -3,3 +3,4 @@
 /prometheus/instagram/__pycache__
 /prometheus/prometheus/__pycache__
 /prometheus/db.sqlite3
+/prometheus/prometheus/api/__pycache__
