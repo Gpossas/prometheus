@@ -46,7 +46,7 @@ def get_video( request ):
 def download_videos( request ):
   videos = json.loads( request.body.decode('utf-8') )
   CHUNK_SIZE = 256
-  directory_path = get_directory_path()
+  directory_path = create_directory_path()
 
   for video in videos:
     name, video_url = video[0], video[1]
@@ -62,15 +62,15 @@ def download_videos( request ):
 
   return Response()
 
-def get_directory_path():
+def create_directory_path():
   directory_path = f"{ Path.home() }/Downloads/Prometheus"
-  if os.path.exists( directory_path ):
+  while os.path.exists( directory_path ):
     start = directory_path.find( '(' )
     end = directory_path.find( ')' )
     if start == -1 and end == -1:
       directory_path = ' '.join( ( directory_path, '(1)' ) )
     else:
       counter = int( directory_path[start + 1: end] )
-      directory_path = ' '.join( ( directory_path, f'({ counter + 1 })' ) )
+      directory_path = directory_path.replace( f"({ counter })", f"({ counter + 1 })" )
   os.mkdir( directory_path )
   return directory_path
