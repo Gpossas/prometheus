@@ -7,25 +7,35 @@
 
 
 .header-shell{
-  
-  background-color: rgb(58, 58, 58);
+  display: flex;
+  background-color: #86784B;
   color: rgb(214, 214, 214);
   padding-top: 100px;
   padding-bottom: 50px;
 }
+
+.header-left-side{
+  width: 50%;
+}
+
 .header-quote{
-  background-color: rgb(58, 58, 58);
+
   margin-left: 10%;
-  width: 40%;
+  width: 50%;
   font-size:30px;
   justify-content: left;
 }
+
 .header-catchphrase{
   margin-left: 15%;
   padding-top: 50px;
   font-size: 20px;
   text-align:left;
-  
+}
+
+.image_prometheus{
+  width: 500px;
+  height: auto;
 }
 
 h1{
