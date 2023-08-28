@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 import os
@@ -6,7 +7,10 @@ from selenium.common.exceptions import NoSuchElementException, NoSuchAttributeEx
 from pathlib import Path
 import requests
 import json
+from django.urls import reverse
 from .web_driver_singleton import WebDriverSingleton
+import base64
+
 
 
 @api_view(['POST'])
@@ -38,9 +42,27 @@ def get_video( request ):
 
   return Response({
     'name': name.text,
-    'profile_picture': profile_picture,
-    'video_url': video
+    'profile_picture': base64.urlsafe_b64encode( profile_picture.encode() ).decode(),
+    'video_url': video,
+    'proxy_server': reverse( 'api:proxy_get_image' )
   })
+
+
+@api_view(['GET'])
+def proxy_get_image( request, url=None ):
+  if not url: return HttpResponse("No URL")
+
+  image_url = base64.urlsafe_b64decode( url.encode() ).decode()
+  response = requests.get( image_url )
+  if response.status_code != 200:
+    return HttpResponse( "Image not found" )
+  
+  if ( content_type := response.headers.get( 'Content-Type' ) ) == 'image/jpeg':
+    image_content = response.content
+    return HttpResponse( image_content, content_type=content_type )
+  else:
+    return HttpResponse( "Not an image" )
+    
 
 @api_view(['POST'])
 def download_videos( request ):

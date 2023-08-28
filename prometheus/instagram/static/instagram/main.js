@@ -22,7 +22,6 @@ function getVideo( api_url ){
     body: JSON.stringify( { url: url.value } ),
   })
   .then( async response => {
-    url.value = '';
     if ( response.ok ){
       return response.json();
     } else{
@@ -30,27 +29,21 @@ function getVideo( api_url ){
     }
   })
   .then( data => {
-    console.log(data)
-    //TODO: create a more complex element, a preview of the page using name and profile_picture
-    //TODO: solve blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
-
-    // const video = document.createElement('p');
-    // video.textContent = data['name'];    
     const video = htmlToElement(
       `<div class="video_preview">
-        <div class="video_preview_header">
-          <img src=${ data['profile_picture'] } height="32px" width="32px">
-          <p>${ data['name'] }</p>
-        </div>
-        <img src=${ data['profile_picture'] } height="200px" width="200px">
-      </div>`
-    )
-    videosDiv.appendChild( video );
-
-    videosToDownload.push( [ data['name'], data['video_url'] ] )
+          <div class="video_preview_header">
+            <img src="${data['proxy_server']}/${data['profile_picture']}" height="32px" width="32px">
+            <p>${data['name']}</p>
+          </div>
+          <img src="${data['proxy_server']}/${data['profile_picture']}" height="200px" width="200px">
+        </div>`
+    );
+    
+    videosDiv.appendChild(video);
+    videosToDownload.push([data['name'], data['video_url']]); 
   })
   .catch( error =>{
-    console.log( "couldn't find video" );
+    console.log( "couldn't find video ", error );
   });
 }
 
@@ -70,16 +63,13 @@ function downloadVideos( api_url ){
   })
   .then( async response => {
     if ( response.ok ){
-      return response.json();
+      return;
     } else{
       throw new Error( `Error downloading videos, status: ${ response.status }` );
     }
   })
-  .then( data => {
-    console.log(data)
-  })
   .catch( error =>{
-    console.log( "couldn't download video" );
+    console.log( "couldn't download video", error );
   });
 }
 
