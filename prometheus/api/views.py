@@ -34,7 +34,7 @@ def get_video( request ):
   except ( NoSuchElementException, NoSuchAttributeException ):
     return Response( {}, status=404 )
   except StaleElementReferenceException:
-    return get_video( url )
+    return get_video( request )
 
   return Response({
     'name': name.text,
@@ -45,6 +45,9 @@ def get_video( request ):
 @api_view(['POST'])
 def download_videos( request ):
   videos = json.loads( request.body.decode('utf-8') )
+  if not videos: 
+    return Response(status = 404)
+  
   CHUNK_SIZE = 256
   directory_path = create_directory_path()
 

@@ -34,8 +34,17 @@ function getVideo( api_url ){
     //TODO: create a more complex element, a preview of the page using name and profile_picture
     //TODO: solve blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
 
-    const video = document.createElement('p');
-    video.textContent = data['name'];    
+    // const video = document.createElement('p');
+    // video.textContent = data['name'];    
+    const video = htmlToElement(
+      `<div class="video_preview">
+        <div class="video_preview_header">
+          <img src=${ data['profile_picture'] } height="32px" width="32px">
+          <p>${ data['name'] }</p>
+        </div>
+        <img src=${ data['profile_picture'] } height="200px" width="200px">
+      </div>`
+    )
     videosDiv.appendChild( video );
 
     videosToDownload.push( [ data['name'], data['video_url'] ] )
@@ -44,6 +53,13 @@ function getVideo( api_url ){
     console.log( "couldn't find video" );
   });
 }
+
+function htmlToElement(html){
+  const template = document.createElement('template');
+  html = html.trim();
+  template.innerHTML = html;
+  return template.content.firstChild;
+} 
 
 function downloadVideos( api_url ){
   fetch( api_url, {
