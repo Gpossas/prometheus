@@ -32,10 +32,10 @@ function getVideo( api_url ){
     const video = htmlToElement(
       `<div class="video_preview">
           <div class="video_preview_header">
-            <img src="${data['proxy_server']}/${data['profile_picture']}" height="32px" width="32px">
+            <img src="${data['proxy_server']}/${data['profile_picture']}" height="42px" width="42px">
             <p>${data['name']}</p>
           </div>
-          <img src="${data['proxy_server']}/${data['profile_picture']}" height="200px" width="200px">
+          <img src="${data['proxy_server']}/${data['video_thumbnail']}" height="200px" width="200px">
         </div>`
     );
     

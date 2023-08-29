@@ -36,6 +36,13 @@ def get_video( request ):
       name = header.find_element( By.XPATH, "//header/div[2]" ).find_element( By.TAG_NAME, "a" )
       profile_picture = header.find_element( By.TAG_NAME, "img" ).get_attribute( "src" )
       video = driver.find_element( By.TAG_NAME, "video" ).get_attribute( "src" )
+      
+      driver.execute_script( 
+        "video = document.querySelector('video');"
+        "duration = video.duration;"
+        "video.currentTime = duration;"
+      )
+      video_thumbnail = driver.find_element( By.CLASS_NAME, "x5yr21d.xl1xv1r.xh8yej3" ).get_attribute( "src" )
       break
     except ( NoSuchElementException, NoSuchAttributeException ):
       return Response( {}, status=404 )
@@ -47,6 +54,7 @@ def get_video( request ):
   return Response({
     'name': name.text,
     'profile_picture': base64.urlsafe_b64encode( profile_picture.encode() ).decode(),
+    'video_thumbnail': base64.urlsafe_b64encode( video_thumbnail.encode() ).decode(),
     'video_url': video,
     'proxy_server': reverse( 'api:proxy_get_image' )
   })
