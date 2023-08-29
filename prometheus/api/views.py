@@ -12,7 +12,6 @@ from .web_driver_singleton import WebDriverSingleton
 import base64
 
 
-
 @api_view(['POST'])
 def get_video( request ):
   url = request.body
@@ -27,18 +26,23 @@ def get_video( request ):
   """
 
   driver = WebDriverSingleton()
-  url = json.loads( request.body.decode('utf-8') ).get( 'url' )
+  url = json.loads( request.body.decode( 'utf-8' ) ).get( 'url' )
   driver.get( url )
   driver.implicitly_wait( 8 )
-  try:
-    header = driver.find_element( By.TAG_NAME, "header" )
-    name = header.find_element( By.XPATH, "//header/div[2]" ).find_element( By.TAG_NAME, "a" )
-    profile_picture = header.find_element( By.TAG_NAME, "img" ).get_attribute( "src" )
-    video = driver.find_element( By.TAG_NAME, "video" ).get_attribute( "src" )
-  except ( NoSuchElementException, NoSuchAttributeException ):
-    return Response( {}, status=404 )
-  except StaleElementReferenceException:
-    return get_video( request )
+
+  for attempts in range( 3 ):
+    try:
+      header = driver.find_element( By.TAG_NAME, "header" )
+      name = header.find_element( By.XPATH, "//header/div[2]" ).find_element( By.TAG_NAME, "a" )
+      profile_picture = header.find_element( By.TAG_NAME, "img" ).get_attribute( "src" )
+      video = driver.find_element( By.TAG_NAME, "video" ).get_attribute( "src" )
+      break
+    except ( NoSuchElementException, NoSuchAttributeException ):
+      return Response( {}, status=404 )
+    except StaleElementReferenceException:
+      continue
+    except Exception as e:
+      return Response( {"error": f"An unexpected error occurred, {e}"}, status=500 )
 
   return Response({
     'name': name.text,
