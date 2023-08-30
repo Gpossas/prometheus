@@ -25,25 +25,26 @@ function getVideo( api_url ){
     if ( response.ok ){
       return response.json();
     } else{
-      throw new Error( `Error: couldn't find video, status: ${ response.status }` );
+      const error = await response.json().then( message => message['error'] );
+      throw new Error( `Error: ${ error }, status: ${ response.status }` );
     }
   })
   .then( data => {
     const video = htmlToElement(
       `<div class="video_preview">
           <div class="video_preview_header">
-            <img src="${data['proxy_server']}/${data['profile_picture']}" height="42px" width="42px">
-            <p>${data['name']}</p>
+            <img src="${ data['proxy_server'] }/${ data['profile_picture'] }">
+            <p>${ data['name'] }</p>
           </div>
-          <img src="${data['proxy_server']}/${data['video_thumbnail']}" height="200px" width="200px">
+          <img src="${ data['proxy_server'] }/${ data['video_thumbnail'] }">
         </div>`
     );
     
-    videosDiv.appendChild(video);
-    videosToDownload.push([data['name'], data['video_url']]); 
+    videosDiv.appendChild( video );
+    videosToDownload.push( [data['name'], data['video_url']] ); 
   })
   .catch( error =>{
-    console.log( "couldn't find video ", error );
+    console.log( error );
   });
 }
 
@@ -82,4 +83,6 @@ const url = document.querySelector( '#url_input' );
 const videosDiv = document.querySelector( '.videos' );
 
 searchButton.addEventListener( 'click', () => getVideo( searchButton.dataset.url ) );
+url.addEventListener( "keyup", ( { key } ) => { if ( key === "Enter" ) return getVideo( searchButton.dataset.url ) } );
+
 downloadButton.addEventListener( 'click', () => downloadVideos( downloadButton.dataset.url ) );
