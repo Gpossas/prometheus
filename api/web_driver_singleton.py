@@ -13,3 +13,9 @@ class WebDriverSingleton:
       service = webdriver.Chrome( service=Service( ChromeDriverManager().install() ), options=chrome_options )
       cls._instance = service
     return cls._instance
+  
+  @classmethod
+  def close_driver( cls ):
+    if cls._instance is not None:
+      cls._instance.quit()
+      cls._instance = None

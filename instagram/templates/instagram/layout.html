@@ -33,6 +33,8 @@
 
   {% block body %}{% endblock %}
 
+  <p hidden id="quit-driver-path">{% url 'api:quit_driver' %}</p>
+
   <script src="{% static 'instagram/main.js' %}"></script>
 </body>
 </html>

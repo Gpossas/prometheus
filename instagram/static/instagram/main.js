@@ -41,7 +41,7 @@ function getVideo( api_url ){
     );
     
     videosDiv.appendChild( video );
-    videosToDownload.push( [data['name'], data['video_url']] ); 
+    videosToDownload.push( [ data['name'], data['video_url'] ] ); 
   })
   .catch( error =>{
     console.log( error );
@@ -74,15 +74,37 @@ function downloadVideos( api_url ){
   });
 }
 
-const videosToDownload = [];
-const downloadButton = document.querySelector( '#download_button' )
+function quitDriver( api_url ){
+  fetch( api_url, {
+    method: 'POST',
+    headers: { 'X-CSRFToken': csrftoken },
+    mode: 'same-origin', // Do not send CSRF token to another domain.  
+  })
+  .then( async response => {
+    if ( response.ok ){
+      return;
+    } else{
+      throw new Error( `Error quitting drive, status: ${ response.status }` );
+    }
+  })
+  .catch( error =>{
+    console.log( "couldn't quit drive", error );
+  });
+}
+
+
 
 const csrftoken = getCookie( 'csrftoken' );
-const searchButton = document.querySelector( '#search_button' );
-const url = document.querySelector( '#url_input' );
 const videosDiv = document.querySelector( '.videos' );
 
+const searchButton = document.querySelector( '#search_button' );
+const url = document.querySelector( '#url_input' );
 searchButton.addEventListener( 'click', () => getVideo( searchButton.dataset.url ) );
-url.addEventListener( "keyup", ( { key } ) => { if ( key === "Enter" ) return getVideo( searchButton.dataset.url ) } );
+url.addEventListener( 'keyup', ( { key } ) => { if ( key === "Enter" ) return getVideo( searchButton.dataset.url ) } );
 
+const videosToDownload = [];
+const downloadButton = document.querySelector( '#download_button' );
 downloadButton.addEventListener( 'click', () => downloadVideos( downloadButton.dataset.url ) );
+
+const apiPathQuitDrive = document.querySelector( '#quit-driver-path' ).innerHTML;
+window.addEventListener( 'beforeunload', () => quitDriver( apiPathQuitDrive ) );

@@ -94,10 +94,14 @@ def download_videos( request ):
       for chunk in response_object.iter_content( chunk_size=CHUNK_SIZE ):
         file.write( chunk )
 
-  driver = WebDriverSingleton()
-  driver.quit()
-
   return Response()
+
+
+@api_view(['POST'])
+def quit_driver( request ):
+  WebDriverSingleton.close_driver()
+  return Response()
+
 
 def create_directory_path():
   directory_path = f"{ Path.home() }/Downloads/Prometheus"

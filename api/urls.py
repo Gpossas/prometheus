@@ -7,4 +7,5 @@ urlpatterns = [
   path( 'proxy_get_image', views.proxy_get_image, name='proxy_get_image' ),
   path( 'proxy_get_image/<path:url>', views.proxy_get_image, name='proxy_get_image' ),
   path( 'download', views.download_videos, name='download_videos' ),
+  path( 'quit_driver', views.quit_driver, name='quit_driver' ),
 ]
