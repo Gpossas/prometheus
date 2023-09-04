@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 import os
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException, NoSuchAttributeException, StaleElementReferenceException
+from selenium.common.exceptions import NoSuchElementException, NoSuchAttributeException, StaleElementReferenceException, JavascriptException
 from pathlib import Path
 import requests
 import json
@@ -37,10 +37,10 @@ def get_video( request ):
       profile_picture = header.find_element( By.TAG_NAME, "img" ).get_attribute( "src" )
       video = driver.find_element( By.TAG_NAME, "video" ).get_attribute( "src" )
       
+      # video image will show up in DOM when video finish execution
       driver.execute_script( 
         "video = document.querySelector('video');"
-        "duration = video.duration;"
-        "video.currentTime = duration;"
+        "video.currentTime = video.duration;"
       )
       video_thumbnail = driver.find_element( By.CLASS_NAME, "x5yr21d.xl1xv1r.xh8yej3" ).get_attribute( "src" )
       break
@@ -48,6 +48,9 @@ def get_video( request ):
       return Response( {}, status=404 )
     except StaleElementReferenceException:
       continue
+    except JavascriptException: # video didn't start automatically, video image element already in DOM
+      video_thumbnail = driver.find_element( By.CLASS_NAME, "x5yr21d.xl1xv1r.xh8yej3" ).get_attribute( "src" )
+      break
     except Exception as e:
       return Response( {"error": f"An unexpected error occurred, {e}"}, status=500 )
 
