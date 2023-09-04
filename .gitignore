@@ -1,6 +1,3 @@
 /v_env
-/instagram/__pycache__
-/instagram/__pycache__
-/prometheus/__pycache__
-/db.sqlite3
-/api/__pycache__
+__pycache__/
+db.sqlite3

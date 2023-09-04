@@ -1,7 +1,0 @@
----- Remover no projeto final ----
-
-"Para instalar todas as dependencias do projeto, utilize:
-
-pipenv install
-
-isso vai te ajudar"
