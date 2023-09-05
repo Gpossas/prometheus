@@ -25,10 +25,9 @@ def get_video( request ):
   }
   """
 
-  driver = WebDriverSingleton()
   url = json.loads( request.body.decode( 'utf-8' ) ).get( 'url' )
+  driver = WebDriverSingleton()
   driver.get( url )
-  driver.implicitly_wait( 8 )
 
   for attempts in range( 3 ):
     try:

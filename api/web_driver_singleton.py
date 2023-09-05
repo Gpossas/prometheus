@@ -10,8 +10,9 @@ class WebDriverSingleton:
     if cls._instance is None:
       chrome_options = Options()
       chrome_options.add_argument("--headless")
-      service = webdriver.Chrome( service=Service( ChromeDriverManager().install() ), options=chrome_options )
-      cls._instance = service
+      driver = webdriver.Chrome( service=Service( ChromeDriverManager().install() ), options=chrome_options )
+      driver.implicitly_wait( 8 )
+      cls._instance = driver
     return cls._instance
   
   @classmethod
