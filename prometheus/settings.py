@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-pud-u!v4@#6_uhf1#_)!9&%l(0i2)**(v=$5(f&*pydff6^byz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['projectprometheus.azurewebsites.net', '127.0.0.1', '169.254.129.2']
 
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'instagram',
+    'api',
     'rest_framework',
 ]
 

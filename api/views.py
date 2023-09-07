@@ -11,7 +11,6 @@ from django.urls import reverse
 from .web_driver_singleton import WebDriverSingleton
 import base64
 
-
 @api_view(['POST'])
 def get_video( request ):
   url = request.body
@@ -24,7 +23,7 @@ def get_video( request ):
     video_url: str
   }
   """
-
+  print('get video starting...')
   url = json.loads( request.body.decode( 'utf-8' ) ).get( 'url' )
   driver = WebDriverSingleton()
   driver.get( url )
@@ -43,15 +42,15 @@ def get_video( request ):
       )
       video_thumbnail = driver.find_element( By.CLASS_NAME, "x5yr21d.xl1xv1r.xh8yej3" ).get_attribute( "src" )
       break
-    except ( NoSuchElementException, NoSuchAttributeException ):
-      return Response( {}, status=404 )
+    except ( NoSuchElementException, NoSuchAttributeException ) as e:
+      return Response( {'error': f'{ e }'}, status=404 )
     except StaleElementReferenceException:
       continue
     except JavascriptException: # video didn't start automatically, video image element already in DOM
       video_thumbnail = driver.find_element( By.CLASS_NAME, "x5yr21d.xl1xv1r.xh8yej3" ).get_attribute( "src" )
       break
     except Exception as e:
-      return Response( {"error": f"An unexpected error occurred, {e}"}, status=500 )
+      return Response( {"error": e }, status=500 )
 
   return Response({
     'name': name.text,
