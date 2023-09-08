@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 import os
@@ -23,7 +23,6 @@ def get_video( request ):
     video_url: str
   }
   """
-  print('get video starting...')
   url = json.loads( request.body.decode( 'utf-8' ) ).get( 'url' )
   driver = WebDriverSingleton()
   driver.get( url )
@@ -50,7 +49,7 @@ def get_video( request ):
       video_thumbnail = driver.find_element( By.CLASS_NAME, "x5yr21d.xl1xv1r.xh8yej3" ).get_attribute( "src" )
       break
     except Exception as e:
-      return Response( {"error": e }, status=500 )
+      return Response( { "error": e }, status=500 )
 
   return Response({
     'name': name.text,
@@ -63,7 +62,7 @@ def get_video( request ):
 
 @api_view(['GET'])
 def proxy_get_image( request, url=None ):
-  if not url: return HttpResponse("No URL")
+  if not url: return HttpResponse( "No URL" )
 
   image_url = base64.urlsafe_b64decode( url.encode() ).decode()
   response = requests.get( image_url )
@@ -79,7 +78,7 @@ def proxy_get_image( request, url=None ):
 
 @api_view(['POST'])
 def download_videos( request ):
-  videos = json.loads( request.body.decode('utf-8') )
+  videos = json.loads( request.body.decode( 'utf-8' ) )
   if not videos: 
     return Response(status = 404)
   
@@ -94,8 +93,9 @@ def download_videos( request ):
     with open( f"{ directory_path }/{ file_name }", "wb" ) as file: 
       for chunk in response_object.iter_content( chunk_size=CHUNK_SIZE ):
         file.write( chunk )
-
-  return Response()
+  
+  response = FileResponse( open(f"{ directory_path }/{ file_name }",'rb'), as_attachment=True, filename="jesus_christ.mp4" )
+  return response
 
 
 @api_view(['POST'])
