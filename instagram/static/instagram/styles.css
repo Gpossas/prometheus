@@ -181,7 +181,7 @@ header{
   margin-top: 60px;
 }
 
-#download_button{
+#download_form > button{
   border: none;
   color: whitesmoke;
   background-color: #86784B;
@@ -190,7 +190,7 @@ header{
   border-radius: 5px;
 }
 
-#download_button:hover{
+#download_form > button:hover{
   transition: 0.3s;
   cursor: pointer;
   background-color: hsl(46, 42%, 50%);
