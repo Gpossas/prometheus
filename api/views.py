@@ -106,17 +106,3 @@ def download_videos( request ):
 def quit_driver( request ):
   WebDriverSingleton.close_driver()
   return Response()
-
-
-def create_directory_path():
-  directory_path = f"{ Path.home() }/Downloads/Prometheus"
-  while os.path.exists( directory_path ):
-    start = directory_path.find( '(' )
-    end = directory_path.find( ')' )
-    if start == -1 and end == -1:
-      directory_path = ' '.join( ( directory_path, '(1)' ) )
-    else:
-      counter = int( directory_path[start + 1: end] )
-      directory_path = directory_path.replace( f"({ counter })", f"({ counter + 1 })" )
-  os.mkdir( directory_path )
-  return directory_path
