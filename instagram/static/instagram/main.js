@@ -55,25 +55,6 @@ function htmlToElement(html){
   return template.content.firstChild;
 } 
 
-function downloadVideos( api_url ){
-  fetch( api_url, {
-    method: 'POST',
-    headers: { 'X-CSRFToken': csrftoken },
-    mode: 'same-origin', // Do not send CSRF token to another domain.  
-    body: JSON.stringify( videosToDownload ),
-  })
-  .then( async response => {
-    if ( response.ok ){
-      return;
-    } else{
-      throw new Error( `Error downloading videos, status: ${ response.status }` );
-    }
-  })
-  .catch( error =>{
-    console.log( "couldn't download video", error );
-  });
-}
-
 function quitDriver( api_url ){
   fetch( api_url, {
     method: 'POST',
@@ -103,8 +84,9 @@ searchButton.addEventListener( 'click', () => getVideo( searchButton.dataset.url
 url.addEventListener( 'keyup', ( { key } ) => { if ( key === "Enter" ) return getVideo( searchButton.dataset.url ) } );
 
 const videosToDownload = [];
-const downloadButton = document.querySelector( '#download_button' );
-downloadButton.addEventListener( 'click', () => downloadVideos( downloadButton.dataset.url ) );
+const videosToPassToServer = document.querySelector( '#videos' );
+const downloadForm = document.querySelector( '#download_form' );
+downloadForm.addEventListener( 'submit', () => videosToPassToServer.value = JSON.stringify( videosToDownload ) );
 
 const apiPathQuitDrive = document.querySelector( '#quit-driver-path' ).innerHTML;
 window.addEventListener( 'beforeunload', () => quitDriver( apiPathQuitDrive ) );

@@ -15,6 +15,9 @@
   </div>
 
   <div class="download center">
-    <button id="download_button" data-url="{% url 'api:download_videos' %}">Download videos</button>
+    <form id="download_form" action="{% url 'api:download_videos' %}" method="post">
+      <input id="videos" type="hidden" name="videos" value="">
+      <button type="submit">Download videos</button>
+    </form>
   </div>
 {% endblock %}
