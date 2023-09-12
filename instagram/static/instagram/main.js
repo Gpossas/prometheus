@@ -29,7 +29,7 @@ function getVideo( api_url ){
       throw new Error( `Error: ${ error }, status: ${ response.status }` );
     }
   })
-  .then( data => {
+  .then( data => { //Creating video card for download
     const video = htmlToElement(
       `<div class="video_preview">
           <div class="video_preview_header">
