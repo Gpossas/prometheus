@@ -1,3 +1,5 @@
+from io import BytesIO
+import zipfile
 from django.http import HttpResponse, FileResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -78,23 +80,25 @@ def proxy_get_image( request, url=None ):
 
 @api_view(['POST'])
 def download_videos( request ):
-  videos = json.loads( request.body.decode( 'utf-8' ) )
+  videos = json.loads( request.POST.get('videos', '') )
   if not videos: 
     return Response(status = 404)
   
-  CHUNK_SIZE = 256
-  directory_path = create_directory_path()
+  zip_path = './instagram/static/Prometheus.zip'
+  with zipfile.ZipFile( zip_path, mode="w" ) as zip_file:
+    for video in videos:
+      name, video_url = video[0], video[1]
+      response_object = requests.get( video_url, stream = True )
 
-  for video in videos:
-    name, video_url = video[0], video[1]
+      # Create a BytesIO object to store the video data
+      video_data = BytesIO()
 
-    response_object = requests.get( video_url, stream = True )
-    file_name = "_".join( ( name, "prometheus.mp4" ) ) 
-    with open( f"{ directory_path }/{ file_name }", "wb" ) as file: 
-      for chunk in response_object.iter_content( chunk_size=CHUNK_SIZE ):
-        file.write( chunk )
-  
-  response = FileResponse( open(f"{ directory_path }/{ file_name }",'rb'), as_attachment=True, filename="jesus_christ.mp4" )
+      for chunk in response_object.iter_content( chunk_size=256 ):
+        video_data.write( chunk )
+      
+      zip_file.writestr( ''.join( ( name,'.mp4' ) ), video_data.getvalue() )
+
+  response = FileResponse( open( zip_path, 'rb' ), as_attachment=True, filename="Prometheus.zip" )
   return response
 
 
