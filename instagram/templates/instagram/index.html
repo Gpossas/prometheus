@@ -1,23 +1,27 @@
 {% extends "instagram/layout.html" %}
 
 {% block body %}
-  <div class="center mb-10 search_area">
-    <div class="search">
-      <input id="url_input" name="input" type="text" placeholder="Paste video URL" autofocus>
-      <button id="search_button" data-url="{% url 'api:get_video' %}">
-        <svg width="1.5em" height="1.5em" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="ui-svg-inline"><path d="M21.71,20.29,18,16.61A9,9,0,1,0,16.61,18l3.68,3.68a1,1,0,0,0,1.42,0A1,1,0,0,0,21.71,20.29ZM11,18a7,7,0,1,1,7-7A7,7,0,0,1,11,18Z"></path></svg>
-      </button>
+  <div class='search_download'>
+
+    <div class="center mb-10">
+      <div class="search">
+        <input id="url_input" name="input" type="text" placeholder="Paste video URL" autofocus>
+        <button id="search_button" data-url="{% url 'api:get_video' %}">
+          <svg width="1.5em" height="1.5em" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="ui-svg-inline"><path d="M21.71,20.29,18,16.61A9,9,0,1,0,16.61,18l3.68,3.68a1,1,0,0,0,1.42,0A1,1,0,0,0,21.71,20.29ZM11,18a7,7,0,1,1,7-7A7,7,0,0,1,11,18Z"></path></svg>
+        </button>
+      </div>
     </div>
-  </div>
-
-  <div class="videos mb-10">
     
-  </div>
+    <div class="videos mb-10">
+      
+    </div>
+    
+    <div class="download center">
+      <form id="download_form" action="{% url 'api:download_videos' %}" method="post">
+        <input id="videos" type="hidden" name="videos" value="">
+        <button type="submit">Download videos</button>
+      </form>
+    </div>
 
-  <div class="download center">
-    <form id="download_form" action="{% url 'api:download_videos' %}" method="post">
-      <input id="videos" type="hidden" name="videos" value="">
-      <button type="submit">Download videos</button>
-    </form>
   </div>
 {% endblock %}
