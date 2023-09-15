@@ -40,6 +40,7 @@ function getVideo( api_url ){
         </div>`
     );
     
+    url.value = '';
     videosDiv.appendChild( video );
     videosToDownload.push( [ data['name'], data['video_url'] ] ); 
   })

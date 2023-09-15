@@ -14,6 +14,10 @@ header{
   margin-bottom: 10px;
 }
 
+.mt-10{
+  margin-bottom: 10px;
+}
+
 .header-shell{
   display: flex;
   
@@ -92,19 +96,19 @@ header{
   display: flex;
   border: 2px solid rgb(93, 93, 93);
   border-radius: 24px;
-  width: 200px;
+  width: 40vw;
   height: 40px;
   padding: 10px 20px;
   align-items: center;
 }
 
+
 .search_download{
-width: auto;
-display: flex;
-flex-direction: column;
-flex-wrap: nowrap;
-align-items: center;
-padding-top: 5%;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 
 #url_input{
@@ -176,7 +180,6 @@ padding-top: 5%;
 @media screen and (max-width: 500px) {
   .videos {
     grid-template-columns: 200px;
-    
   }
 }
 
