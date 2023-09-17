@@ -20,5 +20,5 @@ class WebDriverSingleton:
   @classmethod
   def close_driver( cls, user_session ):
     if user_session in cls._instances:
-      cls._instance[user_session].quit()
-      del cls._instance[user_session] 
+      cls._instances[user_session].quit()
+      del cls._instances[user_session] 
