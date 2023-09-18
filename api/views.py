@@ -111,7 +111,7 @@ def quit_driver( request ):
   user_uuid = decode_and_set_cookie(request)
 
   if user_uuid != None:
-    WebDriverSingleton.close_driver(user_uuid)
+    WebDriverSingleton.close_driver(user_uuid) #only closes the driver if uuid exists
     return Response()
   else:
     return Response()
