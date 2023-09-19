@@ -3,13 +3,12 @@ import zipfile
 from django.http import HttpResponse, FileResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-import os
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, NoSuchAttributeException, StaleElementReferenceException, JavascriptException
-from pathlib import Path
 import requests
 import json
 from django.urls import reverse
+
 from .web_driver_singleton import WebDriverSingleton
 import base64
 
@@ -25,9 +24,13 @@ def get_video( request ):
     video_url: str
   }
   """
+  
   url = json.loads( request.body.decode( 'utf-8' ) ).get( 'url' )
-  driver = WebDriverSingleton()
-  driver.get( url )
+  token = request.COOKIES.get('jwt')
+
+  if token != None:
+    driver = WebDriverSingleton(token)
+    driver.get( url )
 
   for attempts in range( 3 ):
     try:
@@ -104,5 +107,10 @@ def download_videos( request ):
 
 @api_view(['POST'])
 def quit_driver( request ):
-  WebDriverSingleton.close_driver()
-  return Response()
+  token = request.COOKIES.get('jwt')
+
+  if token != None:
+    WebDriverSingleton.close_driver(token) #only closes the driver if uuid exists
+    return Response()
+  else:
+    return Response()

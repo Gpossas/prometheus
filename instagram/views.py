@@ -1,8 +1,11 @@
-from django.shortcuts import render
 from api.web_driver_singleton import WebDriverSingleton
 
-# Create your views here.
-def index( request ):
-  # initiate driver
-  WebDriverSingleton()
-  return render( request, "instagram/index.html" )
+from django.shortcuts import render
+
+def index(request):
+    token = request.COOKIES.get('jwt')
+
+    if token:
+        WebDriverSingleton(str(token))
+
+    return render(request, "instagram/index.html")

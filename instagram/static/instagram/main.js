@@ -1,17 +1,19 @@
-function getCookie( name ) {
-  let cookieValue = null;
-  if ( document.cookie && document.cookie !== '' ) {
-    const cookies = document.cookie.split( ';' );
-    for ( let i = 0; i < cookies.length; i++ ) {
-      const cookie = cookies[i].trim();
-      // Does this cookie string begin with the name we want?
-      if ( cookie.substring( 0, name.length + 1 ) === ( name + '=' ) ) {
-        cookieValue = decodeURIComponent( cookie.substring( name.length + 1 ) );
-        break;
-      }
+function getCookie(name) {
+  const cookies = document.cookie.split(';');
+  for (const cookie of cookies) {
+    const [cookieName, cookieValue] = cookie.split('=');
+    if (decodeURIComponent(cookieName.trim()) === name) {
+      return decodeURIComponent(cookieValue); 
     }
   }
-  return cookieValue;
+  return null;
+}
+
+function setCookie(name, value, hours) {
+  const expires = new Date();
+  expires.setTime(expires.getTime() + hours * 60 * 60 * 1000);
+  const cookieValue = encodeURIComponent(name) + '=' + encodeURIComponent(value) + ';expires=' + expires.toUTCString() + ';path=/';
+  document.cookie = cookieValue;
 }
 
 function getVideo( api_url ){
@@ -74,10 +76,19 @@ function quitDriver( api_url ){
   });
 }
 
+function refreshPage(jwt) {
+  if (!jwt) {
+    window.location.href = "/";
+    return true;
+  } else {
+    return false;
+  }
+}
 
-
-const csrftoken = getCookie( 'csrftoken' );
-const videosDiv = document.querySelector( '.videos' );
+const csrftoken = getCookie('csrftoken');
+const videosDiv = document.querySelector('.videos');
+const jwt = getCookie('jwt');
+const refresh_value = refreshPage(jwt);
 
 const searchButton = document.querySelector( '#search_button' );
 const url = document.querySelector( '#url_input' );
