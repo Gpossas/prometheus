@@ -9,7 +9,6 @@ import requests
 import json
 from django.urls import reverse
 
-from instagram.utils import decode_and_set_cookie
 from .web_driver_singleton import WebDriverSingleton
 import base64
 
@@ -25,12 +24,12 @@ def get_video( request ):
     video_url: str
   }
   """
-
-  user_uuid = decode_and_set_cookie(request)
+  
   url = json.loads( request.body.decode( 'utf-8' ) ).get( 'url' )
+  token = request.COOKIES.get('jwt')
 
-  if user_uuid != None:
-    driver = WebDriverSingleton(user_uuid)
+  if token != None:
+    driver = WebDriverSingleton(token)
     driver.get( url )
 
   for attempts in range( 3 ):
@@ -108,10 +107,10 @@ def download_videos( request ):
 
 @api_view(['POST'])
 def quit_driver( request ):
-  user_uuid = decode_and_set_cookie(request)
+  token = request.COOKIES.get('jwt')
 
-  if user_uuid != None:
-    WebDriverSingleton.close_driver(user_uuid) #only closes the driver if uuid exists
+  if token != None:
+    WebDriverSingleton.close_driver(token) #only closes the driver if uuid exists
     return Response()
   else:
     return Response()
