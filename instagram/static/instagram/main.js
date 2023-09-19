@@ -3,8 +3,7 @@ function getCookie(name) {
   for (const cookie of cookies) {
     const [cookieName, cookieValue] = cookie.split('=');
     if (decodeURIComponent(cookieName.trim()) === name) {
-      console.log(cookie)
-      return decodeURIComponent(cookieValue);
+      return decodeURIComponent(cookieValue); 
     }
   }
   return null;
@@ -77,8 +76,7 @@ function quitDriver( api_url ){
   });
 }
 
-const apptoken = setCookie('appRun', "userUUID", 7);
-const csrftoken = getCookie( 'appRun' );
+const csrftoken = getCookie( 'csrftoken' );
 const videosDiv = document.querySelector( '.videos' );
 
 const searchButton = document.querySelector( '#search_button' );
