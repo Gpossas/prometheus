@@ -76,8 +76,19 @@ function quitDriver( api_url ){
   });
 }
 
-const csrftoken = getCookie( 'csrftoken' );
-const videosDiv = document.querySelector( '.videos' );
+function refreshPage(jwt) {
+  if (!jwt) {
+    window.location.href = "/";
+    return true;
+  } else {
+    return false;
+  }
+}
+
+const csrftoken = getCookie('csrftoken');
+const videosDiv = document.querySelector('.videos');
+const jwt = getCookie('jwt');
+const refresh_value = refreshPage(jwt);
 
 const searchButton = document.querySelector( '#search_button' );
 const url = document.querySelector( '#url_input' );
